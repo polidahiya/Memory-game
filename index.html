@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(45deg, rgb(0, 106, 255), rgb(0, 255, 0));
+        cursor: pointer;
+        user-select: none;
+      }
+      .board {
+        height: min(90vh, 90vw);
+        aspect-ratio: 1;
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+      }
+      .tile {
+        box-sizing: border-box;
+        width: 100%;
+        aspect-ratio: 1;
+        border: 1px solid white;
+        border-radius: 10%;
+        overflow: hidden;
+      }
+      .tile:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 98, 0, 0.5),
+          rgba(251, 255, 0, 0.5)
+        );
+      }
+      .tile div {
+        display: none;
+        line-height: 0;
+        min-height: 100%;
+        min-width: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: transparent;
+      }
+      .show {
+        display: block !important;
+      }
+      .evershow {
+        display: block !important;
+      }
+      .button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        height: 50px;
+        width: 100px;
+        border: 2px solid rgb(255, 255, 255);
+        display: grid;
+        place-items: center;
+        border-radius: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="board"></div>
+    <div class="button" onclick="window.location.reload()">Reset</div>
+
+    <script>
+      let board = document.querySelector(".board");
+      let array = [];
+      for (let i = 0; i < 32; i++) {
+        for (let j = 0; j < 2; j++) {
+          array.push(i + 1);
+        }
+      }
+      let suffarray = array.sort(() => Math.random() - 0.5);
+      let imgarray = [
+        "https://www.memozor.com/jeux/jquery/mario_kart/image4.jpg",
+        "https://mario.wiki.gallery/images/6/65/Goomba_-_Mario_Party_Superstars.png",
+        "https://static.vecteezy.com/system/resources/previews/003/225/120/original/apple-cartoon-illustration-style-apple-for-design-resources-free-vector.jpg",
+        "https://graphicriver.img.customer.envatousercontent.com/files/451944248/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=590&s=1f435f3083cfc6d9a00d7824a4b711b5",
+        "https://static.vecteezy.com/system/resources/previews/005/210/265/original/fruit-grapes-cartoon-flat-design-free-vector.jpg",
+        "https://img.freepik.com/free-vector/cute-bee-flying-cartoon-vector-icon-illustration-animal-nature-icon-concept-isolated-premium-vector_138676-6016.jpg?w=2000",
+        "https://static.vecteezy.com/system/resources/previews/008/045/405/original/yellow-sunflower-in-cartoon-style-illustration-isolated-on-white-background-vector.jpg",
+        "https://static.vecteezy.com/system/resources/previews/014/478/842/original/lotus-flower-icon-cartoon-style-vector.jpg",
+        "https://banner2.cleanpng.com/20190724/uqa/kisspng-clip-art-hindu-temple-portable-network-graphics-ka-5d386a852ad8c2.1397247215639783731755.jpg",
+        "https://media.istockphoto.com/id/1284562832/vector/butterfly.jpg?s=612x612&w=0&k=20&c=EujHJG8W933kn3oAbUcoqsjjidE5ZZlpK70BzOMLIrU=",
+        "https://img.freepik.com/premium-vector/smiling-red-car-cartoon-white_29190-4847.jpg?w=2000",
+        "https://img.freepik.com/premium-vector/cartoon-star-icon-vector-illustration_444196-1109.jpg?w=2000",
+        "https://howtodrawforkids.com/wp-content/uploads/2022/05/how-to-draw-cartoon-eyes.jpg",
+        "https://img.freepik.com/premium-photo/illustration-happy-janmashtami-cute-baby-krishna-animated-cartoon-lord-krishna-generative-ai_837518-804.jpg?w=2000",
+        "https://img.freepik.com/free-vector/isolated-tree-white-background_1308-77820.jpg?w=2000",
+        "https://img.freepik.com/premium-vector/long-pants-cartoon_119631-375.jpg",
+        "https://img.freepik.com/premium-vector/cartoon-shirt_119631-192.jpg?w=2000",
+        "https://img.freepik.com/free-vector/aggressive-great-white-shark-cartoon_1308-102349.jpg?w=2000",
+        "https://i.pinimg.com/550x/8d/52/c5/8d52c5c35382908832ffedb21c1e63b0.jpg",
+        "https://img.freepik.com/premium-vector/cartoon-happy-little-boy-waving-hand_353337-798.jpg?w=2000",
+        "https://static.vecteezy.com/system/resources/previews/012/950/463/original/cow-cartoon-design-illustration-farm-animal-icon-sign-and-symbol-vector.jpg",
+        "https://i.pinimg.com/736x/e0/ef/e5/e0efe5c4da973396fdc39ac4079ac9ae.jpg",
+        "https://img.freepik.com/premium-vector/cute-planet-saturn-sleeping-space-cartoon-vector-icon-illustration-science-nature-icon-isolated_138676-7554.jpg?w=2000",
+        "https://img.freepik.com/premium-vector/cute-moon-cartoon-vector-illustration-with-space-background_401949-4.jpg",
+        "https://img.freepik.com/free-vector/summer-sun-sunglasses-sneezing-allergy-climate-illness-cold_1262-13482.jpg?w=2000",
+        "https://png.pngtree.com/png-clipart/20230413/original/pngtree-simple-flat-hand-draw-cute-cartoon-turtle-png-image_9053052.png",
+        "https://media.istockphoto.com/id/1225128138/vector/tiger-cartoon.jpg?s=170667a&w=0&k=20&c=05wzcsJm2LfdkgX5H-MbnTDRhqmpBVvPeJnK8KFGwcw=",
+        "https://img.freepik.com/premium-vector/cute-horse-cartoon-jumping_194935-112.jpg?w=2000",
+        "https://static.vecteezy.com/system/resources/previews/013/078/569/original/illustration-of-cute-colored-cat-cartoon-cat-image-in-format-suitable-for-children-s-book-design-elements-introduction-of-cats-to-children-books-or-posters-about-animal-free-png.png",
+        "https://cdn.shopify.com/s/files/1/0295/9903/9625/files/Order_2878_png1-Bike_and_Rider-SM_480x480.png?v=1654924752",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ7Cih_SGDEBK1brnR-C4Tu_WMpJP5VPipeQ&usqp=CAU",
+        "https://miro.medium.com/v2/resize:fit:535/1*9TqXIC1QD-8khjN7wm02-g.jpeg",
+        "https://i.pinimg.com/550x/31/e0/39/31e039014c228d478bb063c1046849e1.jpg",
+      ];
+      //
+      let imgPreloadPromises = [];
+      for (let i = 0; i < imgarray.length; i++) {
+        imgPreloadPromises.push(preloadImage(imgarray[i]));
+      }
+
+      //
+      Promise.all(imgPreloadPromises).then(() => {
+      for (let i = 0; i < 64; i++) {
+        let tile = document.createElement("span");
+        let div = document.createElement("div");
+        div.innerHTML = suffarray[i];
+        div.style.backgroundImage = `url(${imgarray[suffarray[i]]})`;
+        tile.setAttribute("class", "tile");
+        tile.appendChild(div);
+        board.appendChild(tile);
+      }
+
+      let tiles = document.querySelectorAll(".tile");
+      let flag = 0;
+      let canplay = true;
+      tiles.forEach((tile) => {
+        tile.addEventListener("click", () => {
+          if (canplay) {
+            flag++;
+            tile.children[0].classList.add("show");
+            if (flag >= 2) {
+              let shownelem = document.querySelectorAll(".show");
+              if (shownelem.length == 2) {
+                if (shownelem[0].innerHTML == shownelem[1].innerHTML) {
+                  for (let i = 0; i < 2; i++) {
+                    shownelem[i].classList.add("evershow");
+                    shownelem[i].classList.remove("show");
+                  }
+                  checkwin();
+                  flag = 0;
+                } else {
+                  canplay = false;
+                  setTimeout(() => {
+                    for (let i = 0; i < 2; i++) {
+                      shownelem[i].classList.remove("show");
+                    }
+                    canplay = true;
+                  }, 1000);
+
+                  flag = 0;
+                }
+              }
+            }
+          }
+        });
+      });
+      // checkwin
+      function checkwin() {
+        console.log(
+          document.querySelectorAll(".evershow").length,
+          array.length
+        );
+        if (document.querySelectorAll(".evershow").length == array.length) {
+          alert("You Win");
+        }
+      }
+    });
+      //
+      function preloadImage(url) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = resolve;
+          img.onerror = reject;
+          img.src = url;
+        });
+      }
+    </script>
+  </body>
+</html>
