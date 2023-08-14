@@ -63,13 +63,32 @@
         place-items: center;
         border-radius: 50px;
       }
+      .loading{
+        position: absolute;
+        top: 50%;
+        left: calc(50% - 50px);
+        color: white;
+        font-size: 30px;
+      }
     </style>
   </head>
   <body>
     <div class="board"></div>
     <div class="button" onclick="window.location.reload()">Reset</div>
-
+    <div class="loading">Loading<span class="loadingdots"></span></div>
     <script>
+      let dotsstr="..."
+      let dots=document.querySelector(".loadingdots")
+      let i=0
+      setInterval(()=>{
+        if(i==3){
+          i=0
+          dots.innerHTML=""
+        }
+        dots.innerHTML+=dotsstr[i]
+        i++
+      },500)
+      // 
       let board = document.querySelector(".board");
       let array = [];
       for (let i = 0; i < 32; i++) {
@@ -121,11 +140,12 @@
 
       //
       Promise.all(imgPreloadPromises).then(() => {
+        document.querySelector(".loading").style.display="none"
       for (let i = 0; i < 64; i++) {
         let tile = document.createElement("span");
         let div = document.createElement("div");
         div.innerHTML = suffarray[i];
-        div.style.backgroundImage = `url(${imgarray[suffarray[i]]})`;
+        div.style.backgroundImage = "url("+imgarray[suffarray[i]]+")";
         tile.setAttribute("class", "tile");
         tile.appendChild(div);
         board.appendChild(tile);
@@ -180,9 +200,9 @@
       function preloadImage(url) {
         return new Promise((resolve, reject) => {
           const img = new Image();
+          img.src = url;
           img.onload = resolve;
           img.onerror = reject;
-          img.src = url;
         });
       }
     </script>
