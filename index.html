@@ -171,6 +171,14 @@
       }
 
       //
+      
+      let flag = 0;
+      let turn = true;
+      let points = {
+        player1: 0,
+        player2: 0,
+      };
+      let canplay = true;
       Promise.all(imgPreloadPromises).then(() => {
         document.querySelector(".loading").style.display = "none";
         for (let i = 0; i < 64; i++) {
@@ -182,15 +190,7 @@
           tile.appendChild(div);
           board.appendChild(tile);
         }
-
         let tiles = document.querySelectorAll(".tile");
-        let flag = 0;
-        let turn = true;
-        let points = {
-          player1: 0,
-          player2: 0,
-        };
-        let canplay = true;
         tiles.forEach((tile) => {
           tile.addEventListener("click", () => {
             if (canplay) {
@@ -275,7 +275,7 @@
         } else {
           localStorage.setItem("mode", "s");
         }
-        window.location.reload()
+        window.location.reload();
       }
       //
       function preloadImage(url) {
