@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Memory game</title>
     <style>
       body {
         margin: 0;
@@ -13,6 +13,7 @@
         place-items: center;
         background: linear-gradient(45deg, rgb(0, 106, 255), rgb(0, 255, 0));
         user-select: none;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       }
       .board {
         height: min(90vh, 90vw);
@@ -43,7 +44,7 @@
         min-width: 100%;
         background-position: center;
         background-repeat: no-repeat;
-        background-size: cover;
+        background-size: contain;
         color: transparent;
       }
       .show {
@@ -56,14 +57,39 @@
         position: absolute;
         top: 10px;
         right: 10px;
-        height: 50px;
-        width: 100px;
+        padding: 3px 10px;
         border: 2px solid rgb(255, 255, 255);
+        color: white;
         display: grid;
         place-items: center;
         border-radius: 50px;
       }
-      .loading{
+      .changemode {
+        left: 10px;
+        right: unset;
+      }
+      .points {
+        position: absolute;
+        bottom: 20px;
+        color: white;
+        display: flex;
+      }
+      .points div {
+        padding: 10px;
+        border-radius: 30px;
+        box-sizing: border-box;
+      }
+      .player1points {
+        outline: 2px solid rgb(255, 111, 0);
+      }
+      @media (aspect-ratio>1) {
+        .points {
+          display: unset;
+          bottom: unset;
+          right: 10px;
+        }
+      }
+      .loading {
         position: absolute;
         top: 50%;
         left: calc(50% - 50px);
@@ -75,20 +101,26 @@
   <body>
     <div class="board"></div>
     <div class="button" onclick="window.location.reload()">Reset</div>
+    <div class="button changemode" onclick="changemode()">Change Mode</div>
+    <div class="points">
+      <div class="player1points">Player 1:- 0/32</div>
+      <div class="player2points">Player 2:- 0/32</div>
+    </div>
     <div class="loading">Loading<span class="loadingdots"></span></div>
     <script>
-      let dotsstr="..."
-      let dots=document.querySelector(".loadingdots")
-      let i=0
-      setInterval(()=>{
-        if(i==3){
-          i=0
-          dots.innerHTML=""
+      let multiplayermode = false;
+      let dotsstr = "...";
+      let dots = document.querySelector(".loadingdots");
+      let i = 0;
+      setInterval(() => {
+        if (i == 3) {
+          i = 0;
+          dots.innerHTML = "";
         }
-        dots.innerHTML+=dotsstr[i]
-        i++
-      },500)
-      // 
+        dots.innerHTML += dotsstr[i];
+        i++;
+      }, 500);
+      //
       let board = document.querySelector(".board");
       let array = [];
       for (let i = 0; i < 32; i++) {
@@ -98,39 +130,39 @@
       }
       let suffarray = array.sort(() => Math.random() - 0.5);
       let imgarray = [
-        "https://www.memozor.com/jeux/jquery/mario_kart/image4.jpg",
         "https://mario.wiki.gallery/images/6/65/Goomba_-_Mario_Party_Superstars.png",
-        "https://static.vecteezy.com/system/resources/previews/003/225/120/original/apple-cartoon-illustration-style-apple-for-design-resources-free-vector.jpg",
-        "https://graphicriver.img.customer.envatousercontent.com/files/451944248/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=590&s=1f435f3083cfc6d9a00d7824a4b711b5",
-        "https://static.vecteezy.com/system/resources/previews/005/210/265/original/fruit-grapes-cartoon-flat-design-free-vector.jpg",
-        "https://img.freepik.com/free-vector/cute-bee-flying-cartoon-vector-icon-illustration-animal-nature-icon-concept-isolated-premium-vector_138676-6016.jpg?w=2000",
-        "https://static.vecteezy.com/system/resources/previews/008/045/405/original/yellow-sunflower-in-cartoon-style-illustration-isolated-on-white-background-vector.jpg",
-        "https://static.vecteezy.com/system/resources/previews/014/478/842/original/lotus-flower-icon-cartoon-style-vector.jpg",
-        "https://banner2.cleanpng.com/20190724/uqa/kisspng-clip-art-hindu-temple-portable-network-graphics-ka-5d386a852ad8c2.1397247215639783731755.jpg",
-        "https://media.istockphoto.com/id/1284562832/vector/butterfly.jpg?s=612x612&w=0&k=20&c=EujHJG8W933kn3oAbUcoqsjjidE5ZZlpK70BzOMLIrU=",
-        "https://img.freepik.com/premium-vector/smiling-red-car-cartoon-white_29190-4847.jpg?w=2000",
-        "https://img.freepik.com/premium-vector/cartoon-star-icon-vector-illustration_444196-1109.jpg?w=2000",
-        "https://howtodrawforkids.com/wp-content/uploads/2022/05/how-to-draw-cartoon-eyes.jpg",
-        "https://img.freepik.com/premium-photo/illustration-happy-janmashtami-cute-baby-krishna-animated-cartoon-lord-krishna-generative-ai_837518-804.jpg?w=2000",
-        "https://img.freepik.com/free-vector/isolated-tree-white-background_1308-77820.jpg?w=2000",
-        "https://img.freepik.com/premium-vector/long-pants-cartoon_119631-375.jpg",
-        "https://img.freepik.com/premium-vector/cartoon-shirt_119631-192.jpg?w=2000",
-        "https://img.freepik.com/free-vector/aggressive-great-white-shark-cartoon_1308-102349.jpg?w=2000",
-        "https://i.pinimg.com/550x/8d/52/c5/8d52c5c35382908832ffedb21c1e63b0.jpg",
-        "https://img.freepik.com/premium-vector/cartoon-happy-little-boy-waving-hand_353337-798.jpg?w=2000",
-        "https://static.vecteezy.com/system/resources/previews/012/950/463/original/cow-cartoon-design-illustration-farm-animal-icon-sign-and-symbol-vector.jpg",
-        "https://i.pinimg.com/736x/e0/ef/e5/e0efe5c4da973396fdc39ac4079ac9ae.jpg",
-        "https://img.freepik.com/premium-vector/cute-planet-saturn-sleeping-space-cartoon-vector-icon-illustration-science-nature-icon-isolated_138676-7554.jpg?w=2000",
-        "https://img.freepik.com/premium-vector/cute-moon-cartoon-vector-illustration-with-space-background_401949-4.jpg",
-        "https://img.freepik.com/free-vector/summer-sun-sunglasses-sneezing-allergy-climate-illness-cold_1262-13482.jpg?w=2000",
-        "https://png.pngtree.com/png-clipart/20230413/original/pngtree-simple-flat-hand-draw-cute-cartoon-turtle-png-image_9053052.png",
-        "https://media.istockphoto.com/id/1225128138/vector/tiger-cartoon.jpg?s=170667a&w=0&k=20&c=05wzcsJm2LfdkgX5H-MbnTDRhqmpBVvPeJnK8KFGwcw=",
-        "https://img.freepik.com/premium-vector/cute-horse-cartoon-jumping_194935-112.jpg?w=2000",
-        "https://static.vecteezy.com/system/resources/previews/013/078/569/original/illustration-of-cute-colored-cat-cartoon-cat-image-in-format-suitable-for-children-s-book-design-elements-introduction-of-cats-to-children-books-or-posters-about-animal-free-png.png",
-        "https://cdn.shopify.com/s/files/1/0295/9903/9625/files/Order_2878_png1-Bike_and_Rider-SM_480x480.png?v=1654924752",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ7Cih_SGDEBK1brnR-C4Tu_WMpJP5VPipeQ&usqp=CAU",
-        "https://miro.medium.com/v2/resize:fit:535/1*9TqXIC1QD-8khjN7wm02-g.jpeg",
-        "https://i.pinimg.com/550x/31/e0/39/31e039014c228d478bb063c1046849e1.jpg",
+        "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/cca07a32-cd4e-48ab-bde7-1be500b4344f/dalsc65-5a4dfe35-41cf-4c67-867c-84cbbdd9dbea.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2NjYTA3YTMyLWNkNGUtNDhhYi1iZGU3LTFiZTUwMGI0MzQ0ZlwvZGFsc2M2NS01YTRkZmUzNS00MWNmLTRjNjctODY3Yy04NGNiYmRkOWRiZWEucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.zKRw7ZffYkJD75GdkOrBO1SJ8Ax4F6Jdl5cb6tM1ibU",
+        "https://img.lovepik.com/58pic/32/59/62/04k58PIC1tKinMhBzN47b_PIC2018.png",
+        "https://pngfre.com/wp-content/uploads/pineapple-64-931x1024.png",
+        "https://images.emojiterra.com/google/noto-emoji/unicode-15/color/512px/1f347.png",
+        "https://beeacademy.uk/wp-content/uploads/2021/05/RANSPARENT-BEE-AWESOME.png",
+        "https://icons.iconarchive.com/icons/iconshow/agriculture/256/Sunflower-icon.png",
+        "https://i.pinimg.com/originals/31/13/cf/3113cfd5024421da27d7af95d96661c7.png",
+        "https://images.emojiterra.com/google/noto-emoji/unicode-15/color/512px/1f6d5.png",
+        "https://static.vecteezy.com/system/resources/previews/017/293/749/original/cartoon-sticker-of-a-monarch-butterfly-perfect-for-any-project-related-to-the-beauty-of-nature-png.png",
+        "https://funmauj.b-cdn.net/test/325199.jpg",
+        "https://bhagavadgitaonline.org/wp-content/uploads/2023/02/cropped-BhagavaGitaOnline-Favicon.png",
+        "https://raysemko.com/wp-content/uploads/2016/01/DICE-Favicon.png",
+        "https://www.superbheem.com/images/char/kalia.png",
+        "https://cdn.pixabay.com/photo/2017/01/31/22/47/tree-2027899_1280.png",
+        "https://static.vecteezy.com/system/resources/previews/022/101/124/original/whatsapp-logo-transparent-free-png.png",
+        "https://static.vecteezy.com/system/resources/thumbnails/011/036/616/small/antique-pottery-with-a-round-shape-in-illustration-of-watercolor-styles-png.png",
+        "https://easydrawingguides.com/wp-content/uploads/2020/06/Great-White-Shark-Step-10.png",
+        "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d0b45acb-cb1e-445b-84b6-36476795f319/dg4bgkr-5cfa430d-b614-405c-8426-ec51df510a6a.png/v1/fit/w_375,h_563/attractive_female_character_in_everyday_outfitsa_by_produceart_dg4bgkr-375w.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2QwYjQ1YWNiLWNiMWUtNDQ1Yi04NGI2LTM2NDc2Nzk1ZjMxOVwvZGc0Ymdrci01Y2ZhNDMwZC1iNjE0LTQwNWMtODQyNi1lYzUxZGY1MTBhNmEucG5nIiwiaGVpZ2h0IjoiPD0xMzUwIiwid2lkdGgiOiI8PTkwMCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS53YXRlcm1hcmsiXSwid21rIjp7InBhdGgiOiJcL3dtXC9kMGI0NWFjYi1jYjFlLTQ0NWItODRiNi0zNjQ3Njc5NWYzMTlcL3Byb2R1Y2VhcnQtNC5wbmciLCJvcGFjaXR5Ijo5NSwicHJvcG9ydGlvbnMiOjAuNDUsImdyYXZpdHkiOiJjZW50ZXIifX0.ujEPGAUROIt7Xkz8hg6JH-WW7-67CcbVjkPyKT_VDo4",
+        "https://easydrawingguides.com/wp-content/uploads/2020/12/Chibi-Spiderman-Step-10.png",
+        "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/dd5b39be-7304-44a6-900d-23db7d312456/dg1095y-b9b67cc2-0bad-4db3-9fd0-c0eb5c11110c.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2RkNWIzOWJlLTczMDQtNDRhNi05MDBkLTIzZGI3ZDMxMjQ1NlwvZGcxMDk1eS1iOWI2N2NjMi0wYmFkLTRkYjMtOWZkMC1jMGViNWMxMTExMGMucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.DD5YqqDboNdXxbPJMaBO8tZhkftCWgziD6nYOYazp_A",
+        "https://www.iconarchive.com/download/i148973/iconarchive/swedish-wood-house/Red-House.1024.png",
+        "https://cdn2.iconfinder.com/data/icons/solar_system_png/512/Saturn.png",
+        "https://static.vecteezy.com/system/resources/previews/022/984/352/original/cartoon-moon-illustration-free-png.png",
+        "https://freesvg.org/img/krepsinio-kamuolys.png",
+        "https://cdn.pixabay.com/photo/2021/02/10/16/53/turtle-6002767_1280.png",
+        "https://i.pinimg.com/originals/cd/51/f6/cd51f6d0f9ea1bc2647113e6d3f71077.png",
+        "https://i.pinimg.com/originals/ec/d8/b5/ecd8b59836d8684d41765ee3379781f1.png",
+        "https://www.transparentpng.com/thumb/hanuman/lord-hanuman-apk-latest-version-pictures-21.png",
+        "https://instrumentationtools.com/wp-content/uploads/2015/10/instrumentationtools.com_instrumentation-books.png",
+        "https://www.pngarts.com/files/8/Flying-Doraemon-Transparent-Image.png",
+        "https://qph.cf2.quoracdn.net/main-qimg-e104fa52b5f6642f5aa310d7f434f56c",
+        "https://clipart-library.com/images/5cRrgeq7i.png",
       ];
       //
       let imgPreloadPromises = [];
@@ -140,62 +172,111 @@
 
       //
       Promise.all(imgPreloadPromises).then(() => {
-        document.querySelector(".loading").style.display="none"
-      for (let i = 0; i < 64; i++) {
-        let tile = document.createElement("span");
-        let div = document.createElement("div");
-        div.innerHTML = suffarray[i];
-        div.style.backgroundImage = "url("+imgarray[suffarray[i]]+")";
-        tile.setAttribute("class", "tile");
-        tile.appendChild(div);
-        board.appendChild(tile);
-      }
+        document.querySelector(".loading").style.display = "none";
+        for (let i = 0; i < 64; i++) {
+          let tile = document.createElement("span");
+          let div = document.createElement("div");
+          div.innerHTML = suffarray[i];
+          div.style.backgroundImage = "url(" + imgarray[suffarray[i]] + ")";
+          tile.setAttribute("class", "tile");
+          tile.appendChild(div);
+          board.appendChild(tile);
+        }
 
-      let tiles = document.querySelectorAll(".tile");
-      let flag = 0;
-      let canplay = true;
-      tiles.forEach((tile) => {
-        tile.addEventListener("click", () => {
-          if (canplay) {
-            flag++;
-            tile.children[0].classList.add("show");
-            if (flag >= 2) {
-              let shownelem = document.querySelectorAll(".show");
-              if (shownelem.length == 2) {
-                if (shownelem[0].innerHTML == shownelem[1].innerHTML) {
-                  for (let i = 0; i < 2; i++) {
-                    shownelem[i].classList.add("evershow");
-                    shownelem[i].classList.remove("show");
-                  }
-                  checkwin();
-                  flag = 0;
-                } else {
-                  canplay = false;
-                  setTimeout(() => {
+        let tiles = document.querySelectorAll(".tile");
+        let flag = 0;
+        let turn = true;
+        let points = {
+          player1: 0,
+          player2: 0,
+        };
+        let canplay = true;
+        tiles.forEach((tile) => {
+          tile.addEventListener("click", () => {
+            if (canplay) {
+              flag++;
+              tile.children[0].classList.add("show");
+              if (flag >= 2) {
+                let shownelem = document.querySelectorAll(".show");
+                if (shownelem.length == 2) {
+                  if (shownelem[0].innerHTML == shownelem[1].innerHTML) {
                     for (let i = 0; i < 2; i++) {
+                      shownelem[i].classList.add("evershow");
                       shownelem[i].classList.remove("show");
                     }
-                    canplay = true;
-                  }, 1000);
-
-                  flag = 0;
+                    if (turn) {
+                      points.player1++;
+                      document.querySelector(
+                        ".player1points"
+                      ).innerHTML = `Player 1:- ${points.player1}/32`;
+                    } else {
+                      points.player2++;
+                      document.querySelector(
+                        ".player2points"
+                      ).innerHTML = `Player 2:- ${points.player2}/32`;
+                    }
+                    checkwin();
+                    flag = 0;
+                  } else {
+                    canplay = false;
+                    setTimeout(() => {
+                      for (let i = 0; i < 2; i++) {
+                        shownelem[i].classList.remove("show");
+                      }
+                      canplay = true;
+                      turn = !turn;
+                      // change points color
+                      if (turn) {
+                        document.querySelector(".player1points").style.outline =
+                          " 2px solid rgb(255, 111, 0)";
+                        document.querySelector(".player2points").style.outline =
+                          " 2px solid transparent";
+                      } else {
+                        document.querySelector(".player1points").style.outline =
+                          " 2px solid transparent";
+                        document.querySelector(".player2points").style.outline =
+                          " 2px solid rgb(255, 111, 0)";
+                      }
+                    }, 1000);
+                    flag = 0;
+                  }
                 }
               }
             }
-          }
+          });
         });
       });
       // checkwin
       function checkwin() {
-        console.log(
-          document.querySelectorAll(".evershow").length,
-          array.length
-        );
         if (document.querySelectorAll(".evershow").length == array.length) {
-          alert("You Win");
+          mode = localStorage.getItem("mode");
+          if (mode == "s") {
+            alert("You win");
+          } else {
+            if (points.player1 > points.player2) {
+              alert("Player 1 win");
+            } else {
+              alert("Player 2 win");
+            }
+          }
         }
       }
-    });
+      // set mode
+      let mode = localStorage.getItem("mode");
+      if (mode == "s") {
+        document.querySelector(".points").style.display = "none";
+      } else {
+        document.querySelector(".points").style.display = "flex";
+      }
+      function changemode() {
+        mode = localStorage.getItem("mode");
+        if (mode == "s") {
+          localStorage.setItem("mode", "m");
+        } else {
+          localStorage.setItem("mode", "s");
+        }
+        window.location.reload()
+      }
       //
       function preloadImage(url) {
         return new Promise((resolve, reject) => {
